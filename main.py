@@ -45,6 +45,7 @@ def query_text(query):
                 str(count),
                 item,
                 types.InputTextMessageContent(item), description="Choose the " + item,
+                thumb_url=f"https://raw.githubusercontent.com/Kanneli/GameKulhenHedhiBotEh/develop/assets/characters/{item}.png"
             ))
             count += 1
         bot.answer_inline_query(query.id, options)
