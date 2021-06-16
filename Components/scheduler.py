@@ -6,6 +6,7 @@ class Scheduler(Thread):
     def_sleep = 5
     def __init__(self):
         super(Scheduler, self).__init__()
+        self.running = False
         self._stop_event = threading.Event()
         self.scheduled = []
 
@@ -26,13 +27,23 @@ class Scheduler(Thread):
         finally:
             self.stop()
 
-    def add_event(self, run_in, function):
+    def add_event(self, run_in, function, task_id):
         now = time.time()
         self.scheduled.append({
+            'id': task_id,
             'start': now,
             'limit': run_in,
             'func': function
         })
+        if (not self.running):
+            self.start()
+            self.running = True
+
+    def remove_event(self, task_id):
+        for num in range(len(self.scheduled)):
+            if self.scheduled[num]['id'] == task_id:
+                self.scheduled.pop(num)
+                return
 
     def stop(self):
         self._stop_event.set()
